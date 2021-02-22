@@ -4,20 +4,14 @@ import { connect } from "react-redux";
 import * as usuariosActions from "../actions/usuariosActions";
 import Spinner from "./Spinner";
 import Fatal from "./Fatal";
+import Table from "./Table";
 
 class Users extends Component {
   componentDidMount() {
-    this.props.traerTodos();
+    if (!this.props.usuarios.length) {
+      this.props.traerTodos();
+    }
   }
-
-  ponerFilas = () =>
-    this.props.usuarios.map((user) => (
-      <tr key={user.id}>
-        <td>{user.name}</td>
-        <td>{user.email}</td>
-        <td>{user.website}</td>
-      </tr>
-    ));
 
   renderContent = () => {
     return this.props.cargando ? (
@@ -25,24 +19,18 @@ class Users extends Component {
     ) : this.props.error ? (
       <Fatal error={this.props.error} />
     ) : (
-      <div id="users">
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Sitio web</th>
-            </tr>
-          </thead>
-          <tbody>{this.ponerFilas()}</tbody>
-        </table>
-      </div>
+      <Table />
     );
   };
 
   render() {
     console.log(this.props);
-    return this.renderContent();
+    return (
+      <>
+        <h1>Usuarios</h1>
+        {this.renderContent()}
+      </>
+    );
   }
 }
 
